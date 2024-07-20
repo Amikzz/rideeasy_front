@@ -55,7 +55,7 @@ class _BusTrackingPageState extends State<BusTrackingPage> {
           ),
         ),
       ),
-      body: const SingleChildScrollView(),
+      body: Placeholder(),
     );
   }
 }

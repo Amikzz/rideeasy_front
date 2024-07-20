@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:ride_easy/common/customappbar.dart';
-import 'package:ride_easy/features/HomePage/home.dart';
+
+import '../HomePage/home.dart';
 
 class BusSchedulePage extends StatefulWidget {
   const BusSchedulePage({super.key});
@@ -12,9 +10,114 @@ class BusSchedulePage extends StatefulWidget {
 }
 
 class _BusSchedulePageState extends State<BusSchedulePage> {
-  List<String> towns = ['ANY'];
+  // Dummy JSON data
+  final List<Map<String, dynamic>> dummyData = [
+    {
+      "trip_id": "1SdMUdIO8s-3",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "10:02:31",
+      "arrival_time": "12:02:31"
+    },
+    {
+      "trip_id": "1SdMUdIO8s-4",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "12:02:31",
+      "arrival_time": "14:02:31"
+    },
+    {
+      "trip_id": "1SdMUdIO8s-5",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "14:02:31",
+      "arrival_time": "16:02:31"
+    },
+    {
+      "trip_id": "1SdMUdIO8s-6",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "16:02:31",
+      "arrival_time": "18:02:31"
+    },
+    {
+      "trip_id": "1SdMUdIO8s-8",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "20:02:31",
+      "arrival_time": "22:02:31"
+    },
+    {
+      "trip_id": "1SdMUdIO8s-9",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "22:02:31",
+      "arrival_time": "00:02:31"
+    },
+    {
+      "trip_id": "9v2H0WfjwP-1",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "05:38:21",
+      "arrival_time": "07:38:21"
+    },
+    {
+      "trip_id": "9v2H0WfjwP-10",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "23:38:21",
+      "arrival_time": "01:38:21"
+    },
+    {
+      "trip_id": "9v2H0WfjwP-2",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "07:38:21",
+      "arrival_time": "09:38:21"
+    },
+    {
+      "trip_id": "9v2H0WfjwP-3",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "09:38:21",
+      "arrival_time": "11:38:21"
+    },
+    {
+      "trip_id": "9v2H0WfjwP-4",
+      "bus_license_plate_no": "ABC-123",
+      "start_location": "Colombo Fort",
+      "end_location": "Kottawa",
+      "date": "2024-07-18",
+      "departure_time": "11:38:21",
+      "arrival_time": "13:38:21"
+    },
+  ];
+
+  List<String> startLocations = ['ANY'];
+  List<String> endLocations = ['ANY'];
   List<Map<String, dynamic>> data = [];
   String src = 'ANY', des = 'ANY';
+  String startTime = '', endTime = '', date = '';
 
   @override
   void initState() {
@@ -24,55 +127,87 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
 
   void setSrc(String? t) {
     setState(() {
-      src = t ?? towns[0];
+      src = t ?? startLocations[0];
     });
   }
 
   void setDes(String? t) {
     setState(() {
-      des = t ?? towns[0];
+      des = t ?? endLocations[0];
     });
   }
 
-  Future<void> fetchTowns() async {
+  void setStartTime(String? t) {
+    setState(() {
+      startTime = t ?? '';
+    });
+  }
+
+  void setEndTime(String? t) {
+    setState(() {
+      endTime = t ?? '';
+    });
+  }
+
+  void setDate(String? t) {
+    setState(() {
+      date = t ?? '';
+    });
+  }
+
+  void fetchTowns() {
     try {
-      final response = await http.get(Uri.parse(''));
-      if (response.statusCode == 200) {
-        List result = jsonDecode(response.body) as List;
-        setState(() {
-          towns.clear();
-          towns.add('ANY');
-          for (Map<String, dynamic> item in result) {
-            String? townName = item['start_location'];
-            if (townName != null) towns.add(townName);
+      // Use dummy data instead of HTTP request
+      List<Map<String, dynamic>> result = dummyData;
+      setState(() {
+        startLocations.clear();
+        endLocations.clear();
+        startLocations.add('ANY');
+        endLocations.add('ANY');
+        for (Map<String, dynamic> item in result) {
+          String? startLocation = item['start_location'];
+          String? endLocation = item['end_location'];
+          if (startLocation != null && !startLocations.contains(startLocation)) {
+            startLocations.add(startLocation);
           }
-        });
-      } else {
-        // Handle error
-        throw Exception('Failed to load towns');
-      }
+          if (endLocation != null && !endLocations.contains(endLocation)) {
+            endLocations.add(endLocation);
+          }
+        }
+      });
     } catch (e) {
       print('Error fetching towns: $e');
     }
   }
 
-  Future<void> search() async {
-    String url = 'https://rideeasy2024.infinityfreeapp.com/api/view-bus-schedule';
+  void search() {
     try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        setState(() {
-          print(response.body);
-          data.clear();
-          List items = jsonDecode(response.body) as List;
-          for (Map<String, dynamic> item in items) {
+      // Use dummy data instead of HTTP request
+      List<Map<String, dynamic>> result = dummyData;
+      setState(() {
+        data.clear();
+        for (Map<String, dynamic> item in result) {
+          bool matches = true;
+          if (src != 'ANY' && item['start_location'] != src) {
+            matches = false;
+          }
+          if (des != 'ANY' && item['end_location'] != des) {
+            matches = false;
+          }
+          if (date.isNotEmpty && item['date'] != date) {
+            matches = false;
+          }
+          if (startTime.isNotEmpty && !item['departure_time']!.startsWith(startTime)) {
+            matches = false;
+          }
+          if (endTime.isNotEmpty && !item['arrival_time']!.startsWith(endTime)) {
+            matches = false;
+          }
+          if (matches) {
             data.add(item);
           }
-        });
-      } else {
-        // Handle error
-        throw Exception('Failed to load bus schedules');
-      }
+        }
+      });
     } catch (e) {
       print('Error searching bus schedules: $e');
     }
@@ -82,12 +217,11 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(200),
+        preferredSize: const Size.fromHeight(100),
         child: ClipPath(
-          clipper: CustomAppBar(),
           child: Container(
             color: Colors.green,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -138,11 +272,11 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
                 children: [
                   const Text('SOURCE'),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: DropdownButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: DropdownButton<String>(
                       value: src,
-                      items: towns.map((element) {
-                        return DropdownMenuItem(
+                      items: startLocations.map((element) {
+                        return DropdownMenuItem<String>(
                             value: element, child: Text(element));
                       }).toList(),
                       onChanged: setSrc,
@@ -155,11 +289,11 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
                 children: [
                   const Text('DESTINATION'),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: DropdownButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: DropdownButton<String>(
                       value: des,
-                      items: towns.map((element) {
-                        return DropdownMenuItem(
+                      items: endLocations.map((element) {
+                        return DropdownMenuItem<String>(
                             value: element, child: Text(element));
                       }).toList(),
                       onChanged: setDes,
@@ -169,6 +303,49 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
               ),
             ],
           ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Start Time',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.datetime,
+                    onChanged: setStartTime,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'End Time',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.datetime,
+                    onChanged: setEndTime,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Date (YYYY-MM-DD)',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.datetime,
+              onChanged: setDate,
+            ),
+          ),
+          const SizedBox(height: 10),
           TextButton.icon(
             icon: const Icon(Icons.search, color: Colors.white),
             onPressed: search,
