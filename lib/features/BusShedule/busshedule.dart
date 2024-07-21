@@ -270,7 +270,7 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('SOURCE'),
+                  const Text('START'),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: DropdownButton<String>(
@@ -397,7 +397,7 @@ class BusCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'SOURCE',
+                      'START',
                       style: TextStyle(fontSize: 12, color: Colors.white),
                     ),
                     Text(

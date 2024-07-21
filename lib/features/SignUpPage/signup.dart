@@ -313,8 +313,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your identity card number';
                       }
-                      if (value.length < 12) {
-                        return 'Identity card number must be at least 12 characters long';
+                      if (value.length <= 10) {
+                        return 'Identity card number must be at least 10 characters long';
                       }
                       return null;
                     },
